@@ -3,6 +3,10 @@
 use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\ProductAndPlanes\PlanPaypalController;
 use App\Http\Controllers\Admin\ProductAndPlanes\ProductPaypalController;
+use App\Http\Controllers\Admin\Streaming\StreamingActorController;
+use App\Http\Controllers\Admin\Streaming\StreamingController;
+use App\Http\Controllers\Admin\Streaming\StreamingGenresController;
+use App\Http\Controllers\Admin\Streaming\StreamingTagController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\User\UsersController;
@@ -39,6 +43,15 @@ Route::group([
     Route::post("users/{id}",[UsersController::class,"update"]);
     Route::resource("products",ProductPaypalController::class);
     Route::resource("planes",PlanPaypalController::class);
+    Route::resource("genres",StreamingGenresController::class);
+    Route::post("genres/{id}",[StreamingGenresController::class,"update"]);
+    Route::resource("actors",StreamingActorController::class);
+    Route::post("actors/{id}",[StreamingActorController::class,"update"]);
+    Route::resource("tags",StreamingTagController::class);
+
+    Route::get("streaming/config_all",[StreamingController::class,"config_all"]);
+    Route::resource("streaming",StreamingControllerr::class);
+    Route::post("streaming/{id}",[StreamingActorController::class,"update"]);
 });
 
 //Route::group(["prefix" => "admin"], function($router){

@@ -50,6 +50,26 @@ const Routing: Routes = [
       import('../modules/product-plans/product-plans.module').then((m) => m.ProductPlansModule),
   },
   {
+    path: 'generos',
+    loadChildren: () =>
+      import('../modules/genres/genres.module').then((m) => m.GenresModule),
+  },
+  {
+    path: 'actors',
+    loadChildren: () =>
+      import('../modules/actors/actors.module').then((m) => m.ActorsModule),
+  },
+  {
+    path: 'tags',
+    loadChildren: () =>
+      import('../modules/tags/tags.module').then((m) => m.TagsModule),
+  },
+  {
+    path: 'streamings',
+    loadChildren: () =>
+      import('../modules/streaming/streaming.module').then((m) => m.StreamingModule),
+  },
+  {
     path: '',
     redirectTo: '/dashboard',
     pathMatch: 'full',

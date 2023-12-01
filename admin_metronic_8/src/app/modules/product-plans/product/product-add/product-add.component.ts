@@ -45,7 +45,7 @@ export class ProductAddComponent implements OnInit {
     this.productPaypalService.registerProduct(data).subscribe((resp:any) => {
       console.log(resp);
       this.ProductC.emit(resp.product);
-      this.toaster.open({text: "Elproducto se creó correctamente", caption: "SUCCESS",type: 'primary'});
+      this.toaster.open({text: "El producto se creó correctamente", caption: "SUCCESS",type: 'primary'});
       this.modal.close();
     })
   }

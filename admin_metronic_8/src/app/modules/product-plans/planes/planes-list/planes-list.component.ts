@@ -45,21 +45,23 @@ export class PlanesListComponent implements OnInit {
 
   registerPlane(){
     const modalRef = this.modalService.open(PlanesAddComponent,{centered: true, size: 'md'});
+    modalRef.componentInstance.PRODUCTS = this.PRODUCTS;
 
-    modalRef.componentInstance.ProductC.subscribe((Product:any) => {
-      this.PRODUCTS.unshift(Product);
+    modalRef.componentInstance.PlanC.subscribe((Plane:any) => {
+      this.PLANES.unshift(Plane);
     });
   }
 
-  editPlane(PRODUCT:any){
+  editPlane(PLANE:any){
     const modalRef = this.modalService.open(PlanesEditComponent,{centered: true, size: 'md'});
-    modalRef.componentInstance.product_selected = PRODUCT;
+    modalRef.componentInstance.plane_selected = PLANE;
+    modalRef.componentInstance.PRODUCTS = this.PRODUCTS;
 
-    modalRef.componentInstance.ProductE.subscribe((Product:any) => {
+    modalRef.componentInstance.PlanE.subscribe((Plane:any) => {
 
-     let index = this.PRODUCTS.findIndex((item:any) => item.id == Product.id);
+     let index = this.PLANES.findIndex((item:any) => item.id == Plane.id);
      if(index != -1){
-      this.PRODUCTS[index] = Product;
+      this.PLANES[index] = Plane;
      }
     });
 }

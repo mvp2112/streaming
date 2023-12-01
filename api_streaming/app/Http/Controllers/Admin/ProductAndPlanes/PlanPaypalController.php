@@ -21,13 +21,14 @@ class PlanPaypalController extends Controller
     public function index(Request $request)
     {
         $search = $request->search;
-        dd($this->paypalSubcription->getPlanes());
+       // dd($this->paypalSubcription->getPlanes());
         $plans = PlanPaypal::where("name", "like", "%".$search."%")->orderBy("id", "desc")->get();
 
         return response()->json(["plans" => $plans->map(function ($plan) {
             return [
                 "id" => $plan->id,
                 "name" => $plan->name,
+                "product" => $plan->product_paypal,
                 "description" => $plan->description,
                 "precio_mensual" => $plan->precio_mensual,
                 "precio_anual" => $plan->precio_anual,
@@ -164,6 +165,7 @@ class PlanPaypalController extends Controller
             "precio_mensual" => $planPaypal->precio_mensual,
             "precio_anual" => $planPaypal->precio_anual,
             "month_free" => $planPaypal->month_free,
+            "product" => $planPaypal->product_paypal,
             "id_plan_paypal_mensual" => $planPaypal->id_plan_paypal_mensual,
             "id_plan_paypal_anual" => $planPaypal->id_plan_paypal_anual,
             "id_product_paypal" => $planPaypal->id_product_paypal,
@@ -242,6 +244,7 @@ class PlanPaypalController extends Controller
         return response()->json(["plan" => [
             "id" => $planPaypal->id,
             "name" => $planPaypal->name,
+            "product" => $planPaypal->product_paypal,
             "description" => $planPaypal->description,
             "precio_mensual" => $planPaypal->precio_mensual,
             "precio_anual" => $planPaypal->precio_anual,
