@@ -13,6 +13,8 @@ use App\Models\Streaming\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Owenoj\LaravelGetId3\GetId3;
+use Vimeo\Laravel\Facades\Vimeo;
 
 class StreamingController extends Controller
 {
@@ -200,6 +202,47 @@ class StreamingController extends Controller
         ]);
     }
 
+    public function upload_video(Request $request, $id){
+
+        $time = 0;
+
+        $track = new GetId3($request->file("video"));
+
+        $time_video = $track->getPlaytimeSeconds();
+
+        $response = Vimeo::upload($request->file("video"));
+
+        $vimeo_id = explode("/",$response)[2];
+
+        $streaming = Streaming::findOrFail($id);
+
+        $streaming->update(["vimeo_id" =>$vimeo_id, "time" => date("H:i:s",$time_video)]);
+        return response([
+            "message" => 200,
+            "vimeo_link" => "https://player.vimeo.com/video/".$vimeo_id
+        ]);
+    }
+
+    public function upload_video_contenido(Request $request, $id){
+
+        $time = 0;
+
+        $track = new GetId3($request->file("video"));
+
+        $time_video = $track->getPlaytimeSeconds();
+
+        $response = Vimeo::upload($request->file("video"));
+
+        $vimeo_id = explode("/",$response)[2];
+
+        $streaming = Streaming::findOrFail($id);
+
+        $streaming->update(["vimeo_contenido_id" =>$vimeo_id, "time_contenido" => date("H:i:s",$time_video)]);
+        return response([
+            "message" => 200,
+            "vimeo_link" => "https://player.vimeo.com/video/".$vimeo_id
+        ]);
+    }
     /**
      * Remove the specified resource from storage.
      *

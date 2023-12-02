@@ -73,6 +73,24 @@ export class StreamingService {
     )
   }
 
+  uploadVideoTrailer(streaming_id:any,data:any){
+    this.isLoadingSubject.next(true)
+    let Headers = new HttpHeaders({'Authorization': 'Bearer '+this.authservice.token});
+    let URL = URL_SERVICIOS + "/streaming/upload_video/"+streaming_id;
+    return this.http.post(URL,data,{headers: Headers}).pipe(
+      finalize(() => this.isLoadingSubject.next(false))
+    )
+  }
+
+  uploadVideoContenido(streaming_id:any,data:any){
+    this.isLoadingSubject.next(true)
+    let Headers = new HttpHeaders({'Authorization': 'Bearer '+this.authservice.token});
+    let URL = URL_SERVICIOS + "/streaming/upload_video_contenido/"+streaming_id;
+    return this.http.post(URL,data,{headers: Headers}).pipe(
+      finalize(() => this.isLoadingSubject.next(false))
+    )
+  }
+
   deleteStreaming(streaming_id:any){
     this.isLoadingSubject.next(true)
     let Headers = new HttpHeaders({'Authorization': 'Bearer '+this.authservice.token});

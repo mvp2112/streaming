@@ -10,7 +10,9 @@
         "guzzlehttp/guzzle": "^7.8",
         "laravel/framework": "^8.54",
         "laravel/tinker": "^2.5",
-        "tymon/jwt-auth": "*"
+        "owen-oj/laravel-getid3": "^2.2",
+        "tymon/jwt-auth": "*",
+        "vimeo/laravel": "^5.8"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

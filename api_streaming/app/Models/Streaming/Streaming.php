@@ -23,6 +23,9 @@ class Streaming extends Model
         "tags",
         "state",
         "type",
+
+        "vimeo_contenido_id",
+        "time_contenido",
     ];
 
     function setCreatedAtAttibute($value) {

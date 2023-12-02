@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Toaster } from 'ngx-toast-notifications';
 import { StreamingService } from '../service/streaming.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-streaming-edit',
@@ -17,11 +18,14 @@ export class StreamingEditComponent implements OnInit {
 
   IMAGEN_FILE: any;
   IMAGEN_PREVISUALIZA: any;
+  VIDEO_TRAILER:any;
+  VIDEO_CONTENIDO:any;
 
   genre_id: any;
   tags_selected: any = [];
   actors_selected: any = [];
   type: any = 1;
+  state: any = 1;
 
 
   TAGS: any = [];
@@ -35,11 +39,15 @@ export class StreamingEditComponent implements OnInit {
   selected_actor: any;
 
   streaming_id: any = null;
+  loading_video:boolean = false;
+  link_vimeo:any = null;
+  link_vimeo_contenido:any = null;
   constructor(
     public streamingService: StreamingService,
     public toaster: Toaster,
     public activedRouter: ActivatedRoute,
     public router: Router,
+    public sanitizer: DomSanitizer,
   ) { }
 
   ngOnInit(): void {
@@ -73,6 +81,9 @@ export class StreamingEditComponent implements OnInit {
 
         this.tags_selected = this.streaming_selected.tags_multiples;
         this.actors_selected = this.streaming_selected.actors;
+        this.state = this.streaming_selected.state;
+        this.link_vimeo = this.streaming_selected.vimeo_id;
+        this.link_vimeo_contenido = this.streaming_selected.vimeo_contenido_id;
       }
     })
   }
@@ -91,6 +102,22 @@ export class StreamingEditComponent implements OnInit {
     setTimeout(() => {
       this.streamingService.isLoadingSubject.next(false);
     },50);
+  }
+
+  processFileVideo($event:any) {
+    if($event.target.files[0].type.indexOf("video") < 0 ){
+      this.toaster.open({text: "El archivo no es un video", caption: "Mensage de validación", type: 'danger'});
+      return;
+    }
+    this.VIDEO_TRAILER = $event.target.files[0];
+  }
+
+  processFileVideoContenido($event:any) {
+    if($event.target.files[0].type.indexOf("video") < 0 ){
+      this.toaster.open({text: "El archivo no es un video", caption: "Mensage de validación", type: 'danger'});
+      return;
+    }
+    this.VIDEO_CONTENIDO = $event.target.files[0];
   }
 
   addTags() {
@@ -157,6 +184,7 @@ export class StreamingEditComponent implements OnInit {
     formData.append("description",this.description);
     formData.append("genre_id",this.genre_id);
     formData.append("subtitle",this.subtitle);
+    formData.append("state",this.state);
     if(this.IMAGEN_FILE){
       formData.append("img",this.IMAGEN_FILE);
     }
@@ -181,5 +209,49 @@ export class StreamingEditComponent implements OnInit {
       }
     })
   }
+  urlGetVideo(){
+    return this.sanitizer.bypassSecurityTrustResourceUrl(this.link_vimeo);
+  }
+  urlGetVideoContenido(){
+    return this.sanitizer.bypassSecurityTrustResourceUrl(this.link_vimeo_contenido);
+  }
+  UploadVideo(){
+    if(!this.VIDEO_TRAILER){
+      this.toaster.open({text: "No has seleccionado ningun video", caption: "Mensage de validación", type: 'danger'});
+      return;
+    }
+    this.loading_video = true;
+    let formData = new FormData();
+    formData.append("video",this.VIDEO_TRAILER);
+    this.streamingService.uploadVideoTrailer(this.streaming_selected.id, formData).subscribe((resp:any) =>{
+      console.log(resp);
+      this.loading_video = false;
+      this.link_vimeo = null;
+      this.streamingService.isLoadingSubject.next(true);
+      setTimeout(() => {
+        this.streamingService.isLoadingSubject.next(false);
+        this.link_vimeo = resp.vimeo_link;
+      }, 50);
+    })
+  }
 
+  UploadVideoContenido(){
+    if(!this.VIDEO_CONTENIDO){
+      this.toaster.open({text: "No has seleccionado ningun video", caption: "Mensage de validación", type: 'danger'});
+      return;
+    }
+    this.loading_video = true;
+    let formData = new FormData();
+    formData.append("video",this.VIDEO_CONTENIDO);
+    this.streamingService.uploadVideoContenido(this.streaming_selected.id, formData).subscribe((resp:any) =>{
+      console.log(resp);
+      this.loading_video = false;
+      this.link_vimeo_contenido = null;
+      this.streamingService.isLoadingSubject.next(true);
+      setTimeout(() => {
+        this.streamingService.isLoadingSubject.next(false);
+        this.link_vimeo_contenido = resp.vimeo_link;
+      }, 50);
+    })
+  }
 }
