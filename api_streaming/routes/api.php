@@ -50,8 +50,8 @@ Route::group([
     Route::resource("tags",StreamingTagController::class);
 
     Route::get("streaming/config_all",[StreamingController::class,"config_all"]);
-    Route::resource("streaming",StreamingControllerr::class);
-    Route::post("streaming/{id}",[StreamingActorController::class,"update"]);
+    Route::resource("streaming",StreamingController::class);
+    Route::post("streaming/{id}",[StreamingController::class,"update"]);
 });
 
 //Route::group(["prefix" => "admin"], function($router){

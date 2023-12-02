@@ -118,8 +118,8 @@ export class StreamingAddComponent implements OnInit {
     formData.append("img",this.IMAGEN_FILE);
     // *
     let TAGSt:any = [];
-    this.tags_selected.forEach((tg:any) => {
-      TAGSt.push(tg.title);
+    this.tags_selected.forEach((tag:any) => {
+      TAGSt.push(tag.title);
     });
     // ["SUSPESO","TERROR","COMEDIA"] -> "SUSPESO","TERROR","COMEDIA"
     formData.append("tags",TAGSt);
@@ -128,7 +128,12 @@ export class StreamingAddComponent implements OnInit {
 
     this.streamingService.registerStreaming(formData).subscribe((resp:any) => {
       console.log(resp);
-
+      if(resp.message == 403){
+        this.toaster.open({text: resp.message_text, type: 'warning'});
+        return;
+      }else{
+        this.toaster.open({text: "El streaming se registró correctamente", type: 'primary'});
+      }
     })
   }
 

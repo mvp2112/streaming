@@ -49,7 +49,7 @@ class Streaming extends Model
 
     function getTags(){
         $tags = explode(",",$this->tags);
-        $tags_model = Tag::whereIn("id",$tags)->get();
+        $tags_model = Tag::whereIn("title",$tags)->get();
         return $tags_model;
     }
 

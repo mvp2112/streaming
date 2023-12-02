@@ -36,6 +36,15 @@ export class StreamingService {
     )
   }
 
+  showStreaming(STREAMING_ID:string){
+    this.isLoadingSubject.next(true)
+    let Headers = new HttpHeaders({'Authorization': 'Bearer '+this.authservice.token});
+    let URL = URL_SERVICIOS + "/streaming/"+STREAMING_ID;
+    return this.http.get(URL,{headers: Headers}).pipe(
+      finalize(() => this.isLoadingSubject.next(false))
+    )
+  }
+
   configAll(){
     this.isLoadingSubject.next(true)
     let Headers = new HttpHeaders({'Authorization': 'Bearer '+this.authservice.token});

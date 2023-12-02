@@ -30,4 +30,8 @@ class StreamingActor extends Model
     function streaming() {
         return $this->belongsTo(Streaming::class);
     }
+
+    function actor() {
+        return $this->belongsTo(Actor::class);
+    }
 }

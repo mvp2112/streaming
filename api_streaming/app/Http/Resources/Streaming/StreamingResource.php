@@ -33,11 +33,11 @@ class StreamingResource extends JsonResource
             "tags_multiples" => $this->resource->getTags(),
             "state" => $this->resource->state,
             "created_at" => $this->resource->created_at->format("Y-m-d h:i:s"),
-            "actors" => $this->resource->actors->map(function($actor){
+            "actors" => $this->resource->actors->map(function($actor_streaming) {
                 return [
-                    "id" => $actor->id,
-                    "full_name" => $actor->full_name,
-                    "profesion" => $actor->profesion,
+                    "id" => $actor_streaming->actor->id,
+                    "full_name" => $actor_streaming->actor->full_name,
+                    "profesion" => $actor_streaming->actor->profesion,
                 ];
             }),
         ];

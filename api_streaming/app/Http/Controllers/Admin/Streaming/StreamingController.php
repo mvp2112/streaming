@@ -8,6 +8,7 @@ use App\Http\Resources\Streaming\StreamingResource;
 use App\Models\Streaming\Actor;
 use App\Models\Streaming\Genre;
 use App\Models\Streaming\Streaming;
+use App\Models\Streaming\StreamingActor;
 use App\Models\Streaming\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -81,8 +82,8 @@ class StreamingController extends Controller
      */
     public function store(Request $request)
     {
-        error_log(json_encode($request->all()));
-        return ;
+       // error_log(json_encode($request->all()));
+       // return ;
         $streaming_v = Streaming::where("title",$request->title)->first();
         if($streaming_v){
             return response()->json([
@@ -92,7 +93,7 @@ class StreamingController extends Controller
         }
 
         if($request->hasFile("img")){
-            $path = Storage::putFile("streaming/",$request->file("img"));
+            $path = Storage::putFile("streaming",$request->file("img"));
             $request->request->add(["imagen" => $path]);
         }
         //[2,3,4] -> 2,3,4
@@ -101,6 +102,16 @@ class StreamingController extends Controller
         $request->request->add(["slug" => Str::slug($request->title)]);
 
         $streaming = Streaming::create($request->all());
+
+        $streaming_actor = json_decode($request->actors_selected, true);
+
+        foreach($streaming_actor as $key => $streaming_ac) {
+            StreamingActor::create([
+                "streaming_id" => $streaming->id,
+                "actor_id" => $streaming_ac["id"],
+            ]);
+        }
+
 
         return response()->json([
             "message" => 200,
@@ -116,7 +127,16 @@ class StreamingController extends Controller
      */
     public function show($id)
     {
-        //
+        $streaming = Streaming::find($id);
+        if(!$streaming){
+            return response()->json([
+                "message" => 403,
+                "message_text" => "El streaming no existe",
+            ]);
+        }
+        return response()->json([
+            "streaming" => StreamingResource::make($streaming),
+        ]);
     }
 
     /**
@@ -153,13 +173,27 @@ class StreamingController extends Controller
             if($streaming->imagen){
                 Storage::delete($streaming->imagen);
             }
-            $path = Storage::putFile("streaming/",$request->file("img"));
+            $path = Storage::putFile("streaming",$request->file("img"));
             $request->request->add(["imagen" => $path]);
         }
 
         $request->request->add(["slug" => Str::slug($request->title)]);
 
         $streaming->update($request->all());
+
+        $streaming_actor = json_decode($request->actors_selected, true);
+
+        foreach($streaming->actors as $key=> $actor_s ) {
+            $actor_s->delete();
+        }
+
+        foreach($streaming_actor as $key => $streaming_ac) {
+            StreamingActor::create([
+                "streaming_id" => $streaming->id,
+               "actor_id" => $streaming_ac["id"],
+           ]);
+        }
+
         return response()->json([
             "message" => 200,
             "streaming" => StreamingResource::make($streaming),
