@@ -13,7 +13,7 @@ class StreamingSeason extends Model
     use SoftDeletes;
     protected $fillable = [
         "streaming_id",
-        "name",
+        "title",
         "state",
     ];
 
@@ -32,6 +32,6 @@ class StreamingSeason extends Model
     }
 
     function episodes() {
-        return $this->belongsTo(StreamingEpisode::class);
+        return $this->hasMany(StreamingEpisode::class);
     }
 }

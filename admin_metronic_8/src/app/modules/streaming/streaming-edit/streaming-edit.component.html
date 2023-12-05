@@ -87,7 +87,7 @@
             <select class="form-control form-select-solid fw-bolder" name="categorie" placeholder="Selec. Genero"
               [(ngModel)]="genre_id">
 
-              <ng-container *ngFor="let GENRE of GENRES">
+              <ng-container *ngFor="let GENRE of GENRES_BACKUPS">
                 <option [value]="GENRE.id">{{ GENRE.title }}</option>
               </ng-container>
 
@@ -107,7 +107,9 @@
             </label>
 
             <select class="form-control form-select-solid fw-bolder" name="type" placeholder="Selec. Tipo"
-              [(ngModel)]="type">
+              [(ngModel)]="type"
+              (change)="selectedType()"
+              >
               <option value="1">Movie</option>
               <option value="2">Tv Show</option>
               <option value="3">Video</option>
@@ -153,7 +155,7 @@
             <div class="d-flex">
               <select class="form-control form-select-solid fw-bolder" name="tags" placeholder="Selec. Tags"
                 [(ngModel)]="selected_tag">
-                <ng-container *ngFor="let TAG of TAGS">
+                <ng-container *ngFor="let TAG of TAGS_BACKUPS">
                   <option [value]="TAG.id">{{ TAG.title }}</option>
                 </ng-container>
               </select>
@@ -345,7 +347,7 @@
         </div>
       </div>
 
-      <div class="row row-cols-2 row-cols-sm-3 rol-cols-md-2 row-cols-lg-3">
+      <div class="row row-cols-2 row-cols-sm-3 rol-cols-md-2 row-cols-lg-3" *ngIf="type !=2">
         <div class="col">
             <div class="d-flex">
                 <div>

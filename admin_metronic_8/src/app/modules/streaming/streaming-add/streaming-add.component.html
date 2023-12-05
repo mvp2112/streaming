@@ -88,7 +88,7 @@
             [(ngModel)]="genre_id"
             >
 
-            <ng-container *ngFor="let GENRE of GENRES">
+            <ng-container *ngFor="let GENRE of GENRES_BACKUPS">
               <option [value]="GENRE.id">{{ GENRE.title }}</option>
             </ng-container>
 
@@ -111,6 +111,7 @@
             name="type"
             placeholder="Selec. Tipo"
             [(ngModel)]="type"
+            (change)="selectedType()"
             >
               <option value="1">Movie</option>
               <option value="2">Tv Show</option>
@@ -159,7 +160,7 @@
                         placeholder="Selec. Tags"
                         [(ngModel)]="selected_tag"
                     >
-                        <ng-container *ngFor="let TAG of TAGS">
+                        <ng-container *ngFor="let TAG of TAGS_BACKUPS">
                             <option [value]="TAG.id">{{ TAG.title }}</option>
                         </ng-container>
                     </select>
@@ -184,7 +185,7 @@
                     </thead>
 
                     <tbody>
-                        <ng-container *ngFor="let tags_selec of tags_selected">
+                        <ng-container *ngFor="let tags_selec of tags_selected;let i = index;">
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
@@ -195,7 +196,7 @@
                                 </td>
 
                                 <td class="text-end">
-                                    <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+                                    <a href="#" onclick="return false;" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm" (click)="deleteTag(i)">
                                         <span class="svg-icon svg-icon-3">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                                 <path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="currentColor"></path>
@@ -276,7 +277,7 @@
                                 </td>
 
                                 <td class="text-end">
-                                    <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+                                    <a href="#" onclick="return false;" (click)="deleteActor(actors_selec)" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
                                         <span class="svg-icon svg-icon-3">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                                 <path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="currentColor"></path>

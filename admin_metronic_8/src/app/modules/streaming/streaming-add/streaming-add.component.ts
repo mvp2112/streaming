@@ -24,6 +24,8 @@ export class StreamingAddComponent implements OnInit {
 
   TAGS: any = [];
   GENRES: any = [];
+  TAGS_BACKUPS: any = [];
+  GENRES_BACKUPS: any = [];
   ACTORS: any = [];
 
   isLoading: any;
@@ -43,6 +45,9 @@ export class StreamingAddComponent implements OnInit {
       this.TAGS = resp.tags;
       this.GENRES = resp.genres;
       this.ACTORS = resp.actors;
+
+      this.TAGS_BACKUPS = this.TAGS.filter((item:any) => item.type == this.type);
+      this.GENRES_BACKUPS = this.GENRES.filter((item:any) => item.type == this.type);
     })
   }
 
@@ -102,6 +107,12 @@ export class StreamingAddComponent implements OnInit {
 
   }
 
+  selectedType(){
+    console.log(this.type);
+    this.TAGS_BACKUPS = this.TAGS.filter((item:any) => item.type == this.type);
+    this.GENRES_BACKUPS = this.GENRES.filter((item:any) => item.type == this.type);
+  }
+
   save(){
 
     if(!this.title || !this.description || !this.genre_id || this.tags_selected.length == 0 || this.actors_selected.length == 0 ||
@@ -116,6 +127,7 @@ export class StreamingAddComponent implements OnInit {
     formData.append("genre_id",this.genre_id);
     formData.append("subtitle",this.subtitle);
     formData.append("img",this.IMAGEN_FILE);
+    formData.append("type",this.type);
     // *
     let TAGSt:any = [];
     this.tags_selected.forEach((tag:any) => {
@@ -133,8 +145,28 @@ export class StreamingAddComponent implements OnInit {
         return;
       }else{
         this.toaster.open({text: "El streaming se registró correctamente", type: 'primary'});
+        this.title = null;
+        this.description = null;
+        this.genre_id = null;
+        this.subtitle = null;
+        this.IMAGEN_FILE = null;
+        this.IMAGEN_PREVISUALIZA = null;
+        this.type = 1;
+        this.tags_selected = [];
+        this.actors_selected = [];
       }
     })
+  }
+
+  deleteTag(i:any){
+    this.tags_selected.splice(i,1);
+  }
+
+  deleteActor(actors_selec:any){
+    let INDEX_ACTOR_SELECTED = this.actors_selected.findIndex((item:any) => item.id == actors_selec.id);
+    if(INDEX_ACTOR_SELECTED != -1){
+      this.actors_selected.splice(INDEX_ACTOR_SELECTED,1);
+    }
   }
 
 }

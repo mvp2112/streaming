@@ -5,11 +5,14 @@ use App\Http\Controllers\Admin\ProductAndPlanes\PlanPaypalController;
 use App\Http\Controllers\Admin\ProductAndPlanes\ProductPaypalController;
 use App\Http\Controllers\Admin\Streaming\StreamingActorController;
 use App\Http\Controllers\Admin\Streaming\StreamingController;
+use App\Http\Controllers\Admin\Streaming\StreamingEpisodesController;
 use App\Http\Controllers\Admin\Streaming\StreamingGenresController;
+use App\Http\Controllers\Admin\Streaming\StreamingSeasonController;
 use App\Http\Controllers\Admin\Streaming\StreamingTagController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\User\UsersController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -51,9 +54,14 @@ Route::group([
 
     Route::get("streaming/config_all",[StreamingController::class,"config_all"]);
     Route::resource("streaming",StreamingController::class);
+    // Streaming/{id}
     Route::post("streaming/{id}",[StreamingController::class,"update"]);
     Route::post("streaming/upload_video/{id}",[StreamingController::class,"upload_video"]);
     Route::post("streaming/upload_video_contenido/{id}",[StreamingController::class,"upload_video_contenido"]);
+    Route::resource("streaming_season",StreamingSeasonController::class);
+    Route::resource("streaming_episode",StreamingEpisodesController::class);
+    Route::post("streaming_episode/{id}",[StreamingEpisodesController::class,"update"]);
+    Route::post("streaming_episode/upload_video/{id}",[StreamingEpisodesController::class,"upload_video"]);
 });
 
 //Route::group(["prefix" => "admin"], function($router){

@@ -60,6 +60,7 @@ class StreamingController extends Controller
             "genres" => $genres->map(function($actor) {
                 return [
                     "id" =>$actor->id,
+                    "type" =>$actor->type,
                     "title" => $actor->title,
                 ];
             }),

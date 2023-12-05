@@ -13,7 +13,9 @@ class StreamingEpisode extends Model
     use SoftDeletes;
     protected $fillable = [
         "streaming_season_id",
-        "name",
+        "title",
+        "description",
+        "imagen",
         "vimeo_id",
         "time",
         "state",

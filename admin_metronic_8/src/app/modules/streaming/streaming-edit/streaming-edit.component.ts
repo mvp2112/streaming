@@ -31,6 +31,8 @@ export class StreamingEditComponent implements OnInit {
   TAGS: any = [];
   GENRES: any = [];
   ACTORS: any = [];
+  TAGS_BACKUPS: any = [];
+  GENRES_BACKUPS: any = [];
 
   isLoading: any;
 
@@ -62,6 +64,9 @@ export class StreamingEditComponent implements OnInit {
       this.GENRES = resp.genres;
       this.ACTORS = resp.actors;
       this.showStreaming();
+
+      this.TAGS_BACKUPS = this.TAGS.filter((item:any) => item.type == this.type);
+      this.GENRES_BACKUPS = this.GENRES.filter((item:any) => item.type == this.type);
     })
   }
   showStreaming(){
@@ -88,6 +93,8 @@ export class StreamingEditComponent implements OnInit {
     })
   }
 
+
+
   processFile($event: any) {
     if($event.target.files[0].type.indexOf("image") < 0 ){
       this.toaster.open({text: "El archivo no es una imagen", caption: "Mensage de validación", type: 'danger'});
@@ -102,6 +109,12 @@ export class StreamingEditComponent implements OnInit {
     setTimeout(() => {
       this.streamingService.isLoadingSubject.next(false);
     },50);
+  }
+
+  selectedType(){
+    console.log(this.type);
+    this.TAGS_BACKUPS = this.TAGS.filter((item:any) => item.type == this.type);
+    this.GENRES_BACKUPS = this.GENRES.filter((item:any) => item.type == this.type);
   }
 
   processFileVideo($event:any) {
@@ -195,6 +208,7 @@ export class StreamingEditComponent implements OnInit {
       TAGSt.push(tag.title);
     });
     // ["SUSPESO","TERROR","COMEDIA"] -> "SUSPESO","TERROR","COMEDIA"
+    formData.append("type",this.type);
     formData.append("tags",TAGSt);
     formData.append("actors_selected",JSON.stringify(this.actors_selected));
     // *
