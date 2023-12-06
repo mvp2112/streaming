@@ -32,9 +32,9 @@ export class AuthService implements OnDestroy {
   set currentUserValue(user: UserType) {
     this.currentUserSubject.next(user);
   }
-
-  token: any = null;
+  token:any = null;
   user:any = null;
+
   constructor(
     private authHttpService: AuthHTTPService,
     private router: Router,
@@ -51,7 +51,7 @@ export class AuthService implements OnDestroy {
   // public methods
   login(email: string, password: string): Observable<UserType> {
     this.isLoadingSubject.next(true);
-    return this.http.post(URL_SERVICIOS+"/auth/login", {email:email, password:password}).pipe(
+    return this.http.post(URL_SERVICIOS+"/auth/login",{email:email,password: password}).pipe(
       map((auth: any) => {
         const result = this.setAuthFromLocalStorage(auth);
         return result;
@@ -66,8 +66,8 @@ export class AuthService implements OnDestroy {
   }
 
   logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     this.router.navigate(['/auth/login'], {
       queryParams: {},
     });
@@ -120,8 +120,8 @@ export class AuthService implements OnDestroy {
   private setAuthFromLocalStorage(auth: any): boolean {
     // store auth authToken/refreshToken/epiresIn in local storage to keep user logged in between page refreshes
     if (auth && auth.access_token) {
-      localStorage.setItem('token', auth.access_token);
-      localStorage.setItem('user', JSON.stringify(auth.user));
+      localStorage.setItem("token", auth.access_token);
+      localStorage.setItem("user", JSON.stringify(auth.user));
       return true;
     }
     return false;
@@ -129,12 +129,12 @@ export class AuthService implements OnDestroy {
 
   private getAuthFromLocalStorage(): any {
     try {
-      const lsValue = localStorage.getItem('user');
+      const lsValue = localStorage.getItem("user");
       if (!lsValue) {
         return undefined;
       }
 
-      this.token = localStorage.getItem('token');
+      this.token = localStorage.getItem("token");
       this.user = JSON.parse(lsValue);
       const authData = JSON.parse(lsValue);
       return authData;

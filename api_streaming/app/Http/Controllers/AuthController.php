@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use Validator;
 use App\Models\User;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-
 
 
 class AuthController extends Controller
@@ -29,10 +28,10 @@ class AuthController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function register() {
-        $validator = FacadesValidator::make(request()->all(), [
+        $validator = Validator::make(request()->all(), [
             'name' => 'required',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:8', //confirmed|
+            'password' => 'required|min:8',//confirmed
         ]);
 
         if($validator->fails()){
@@ -56,10 +55,9 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-       // $credentials = request(['email', 'password']);
-
+        // $credentials = request(['email', 'password']);
         if (! $token = auth('api')->attempt(
-            ["email" => $request ->email,
+            ["email" => $request->email,
             "password" => $request->password,
             "state" => 1,
             "type_user" => 1
@@ -71,16 +69,16 @@ class AuthController extends Controller
         return $this->respondWithToken($token);
     }
 
-    public function login_streaming(Request $request)
+    public function login_ecommerce(Request $request)
     {
-       // $credentials = request(['email', 'password']);
+        // $credentials = request(['email', 'password']);
 
-       if (! $token = auth('api')->attempt(
-        ["email" => $request ->email,
-        "password" => $request->password,
-        "state" => 1,
-        ]
-        )) {
+        if (! $token = auth('api')->attempt(
+            ["email" => $request->email,
+            "password" => $request->password,
+            "state" => 1,
+            ]
+            )) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
@@ -132,11 +130,11 @@ class AuthController extends Controller
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth('api')->factory()->getTTL() * 60,
-            'user' => [
-                'full_name' => auth('api')->user()->name.' '.auth('api')->user()->surename,
-                'email' => auth('api')->user()->email,
-                'role' => auth('api')->user()->role,
-                'avatar' => auth('api')->user()->avatar ? env('APP_URL').'storage/'.auth('api')->user()->avatar: NULL,
+            "user" => [
+                "full_name" =>  auth('api')->user()->name.' '.auth('api')->user()->surname,
+                "email" => auth("api")->user()->email,
+                "role" => auth("api")->user()->role,
+                "avatar" => auth("api")->user()->avatar ? env("APP_URL")."storage/".auth("api")->user()->avatar : NULL,
             ]
         ]);
     }

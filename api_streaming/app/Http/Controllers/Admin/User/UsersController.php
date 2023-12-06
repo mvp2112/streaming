@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin\User;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\User\UsersCollection;
-use App\Http\Resources\User\UsersResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Resources\User\UsersResource;
+use App\Http\Resources\User\UsersCollection;
 
 class UsersController extends Controller
 {
@@ -18,15 +18,15 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
-       $search = $request->get("search");
-       $state = $request->get("state");
+        $search = $request->get("search");
+        $state = $request->get("state");
 
-       $users = User::filterUser($search,$state)->orderBy("id","desc")->where("type_user",1)->get();
+        $users = User::filterUser($search,$state)->orderBy("id","desc")->where("type_user",1)->get();
 
-       return response()->json([
-        "message" => 200,
-        "users" => UsersCollection::make($users),
-       ]);
+        return response()->json([
+            "message" => 200,
+            "users" => UsersCollection::make($users),
+        ]);
     }
 
     /**
@@ -51,7 +51,7 @@ class UsersController extends Controller
         if($user_v){
             return response()->json([
                 "message" => 403,
-                "message_text" => "El usuario ya existe"
+                "message_text" => "EL USUARIO YA EXISTE"
             ]);
         }
 
@@ -107,7 +107,7 @@ class UsersController extends Controller
         if($user_v){
             return response()->json([
                 "message" => 403,
-                "message_text" => "El usuario ya existe"
+                "message_text" => "EL USUARIO YA EXISTE"
             ]);
         }
 
